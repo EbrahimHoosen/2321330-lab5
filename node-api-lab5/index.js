@@ -19,29 +19,29 @@ app.get("/whoami", (request, response) => {
 
 });
 app.get("/books", (req, res) => {
-    res.json(books);
+    res.json(books);//return json array, could be empty
 });
 
-app.post("/books", (req, res) => {
+app.post("/books", (req, res) => {//this adds a new book
     const { title } = req.body;
     if (!title) {
-        return res.status(400).json({ message: "you did not give a title" });
+        return res.status(400).json({ message: "you did not give a title" });//require a title for the book
     }
 
-    const newBook = {
+    const newBook = {//the format of the new book
         id: (books.length + 1).toString(),
         title,
         details: [] 
     };
 
-    books.push(newBook);
+    books.push(newBook);//add new book to my books array
     res.status(201).json(newBook);
 });
 
-  app.put("/books/:id", (req, res) => {
+  app.put("/books/:id", (req, res) => {//this is to update an existing books information
     const book = books.find(b => b.id === req.params.id);
     if (!book) {
-        return res.status(404).json({ message: "Book not found" });
+        return res.status(404).json({ message: "Book not found" });//book dne
     }
 
     const { title } = req.body;
@@ -52,28 +52,9 @@ app.post("/books", (req, res) => {
     res.json(book);
 });
 
-  app.post('/books/:id/details', (req, res) => {
-    const { id } = req.params;
-    const { author, genre, publicationYear } = req.body;
-  
-    const book = books.find(book => book.id === id);
-  
-    if (!book) {
-      return res.status(404).json({ message: "Book not found" });//book doesnt exist
-    }
-  
-    const detail = {
-      id: (book.details.length + 1).toString(),
-      author,
-      genre,
-      publicationYear
-    };
-  
-    book.details.push(detail);
-    res.status(201).json(detail);
-  });
+
   app.delete("/books/:id", (req, res) => {
-    const bookIndex = books.findIndex(b => b.id === req.params.id);
+    const bookIndex = books.findIndex(b => b.id === req.params.id);//find my book
     if (bookIndex === -1) {
         return res.status(404).json({ message: "Book not found" });
     }
@@ -82,10 +63,10 @@ app.post("/books", (req, res) => {
     res.status(204).end();
 });
 
-  app.get('/books/:id', (req, res) => {
-    const { id } = req.params;
+  app.get('/books/:id', (req, res) => {//this gets details of a book
+    const { id } = req.params;//get id value
   
-    const book = books.find(book => book.id === id);
+    const book = books.find(book => book.id === id);//find my book w id no
   
     if (!book) {
       return res.status(404).json({ message: "Book not found" });//book dne
@@ -94,18 +75,18 @@ app.post("/books", (req, res) => {
     res.json(book);
   });
   app.post("/books/:id/details", (req, res) => {
-    const book = books.find(b => b.id === req.params.id);
+    const book = books.find(b => b.id === req.params.id);//find my book
     if (!book) {
-        return res.status(404).json({ message: "Book not found" });
+        return res.status(404).json({ message: "Book not found" });//my book doesnt exist
     }
 
     const { author, genre, publicationYear } = req.body;
     if (!author || !genre || !publicationYear) {
-        return res.status(400).json({ message: "Missing details" });
+        return res.status(400).json({ message: "Missing details" });//basically if an entry was left empty
     }
 
     const newDetail = {
-        id: (book.details.length + 1).toString(),
+        id: (book.details.length + 1).toString(),//get book id from book array +1
         author,
         genre,
         publicationYear
@@ -117,12 +98,12 @@ app.post("/books", (req, res) => {
 app.delete("/books/:id/details/:detailId", (req, res) => {
     const book = books.find(b => b.id === req.params.id);
     if (!book) {
-        return res.status(404).json({ message: "Book not found" });
+        return res.status(404).json({ message: "book doesnt exist" });//book isnt found
     }
 
     const detailIndex = book.details.findIndex(d => d.id === req.params.detailId);
     if (detailIndex === -1) {
-        return res.status(404).json({ message: "Detail not found" });
+        return res.status(404).json({ message: "detail is not found" });
     }
 
     book.details.splice(detailIndex, 1);
