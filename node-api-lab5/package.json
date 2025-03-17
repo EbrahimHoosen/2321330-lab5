@@ -11,5 +11,8 @@
     "url": "2321330-lab5"
   },
   "author": "Ebrahim Hoosen",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.21.2"
+  }
 }
